@@ -13,7 +13,7 @@ export const loginRequest = () => {
 }
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://my-json-server.typicode.com/eriskjel',
     withCredentials: false,
     headers: {
         Accept: 'application/json',
@@ -22,5 +22,5 @@ const apiClient = axios.create({
 })
 
 export const postContactForm = (contactForm) => {
-        return apiClient.post('/contact-form', contactForm)
+        return apiClient.post('/full-stack/contact-form', contactForm)
 }

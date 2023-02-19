@@ -8,7 +8,6 @@ describe("Submit", () => {
 
 
     it("should post and clear message field, but keep name and email", () => {
-        cy.visit("http://localhost:3000/contact-form")
         cy.get("#button").click();
         cy.get("#message").should("have.value", "")
     })

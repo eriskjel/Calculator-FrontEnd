@@ -9,7 +9,10 @@
           <textarea id="message" name="message" rows="6" class="input" placeholder="Message" v-model="form.message"></textarea>
           <div class="cut"></div>
         </div>
-        <button :disabled="isDisabled" id="button">Send</button>
+      <div class="popup">
+        <span class="popuptext" id="formPopUp">Form sent!</span>
+      </div>
+      <button :disabled="isDisabled" id="button">Send</button>
     </form>
   </div>
 </template>
@@ -55,9 +58,10 @@
                 this.form.name = this.$store.state.name;
                 this.form.email = this.$store.state.email;
 
+                this.popup();
+                window.setTimeout(this.popup, 3000);
 
-
-                console.log("Response", response);
+                console.log(response);
               })
               .catch(error => {
                 console.log(error);
@@ -93,6 +97,11 @@
         }
         return this.form.message;
       },
+
+      popup(){
+        var popup = document.getElementById("formPopUp");
+        popup.classList.toggle("show");
+      }
   },
     computed:{
       isDisabled(){
@@ -225,5 +234,64 @@
   #button:disabled{
     cursor: initial;
     transform: scale(1);
+  }
+  /* Popup container - can be anything you want */
+  .popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    left: 50%;
+  }
+
+  /* The actual popup */
+  .popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+    margin-bottom: -35px;
+    cursor: default;
+  }
+
+  /* Popup arrow */
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+
+  /* Toggle this class - hide and show the popup */
+  .popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+
+  /* Add animation (fade in the popup) */
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
   }
 </style>
