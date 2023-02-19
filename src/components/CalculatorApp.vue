@@ -14,7 +14,7 @@
         <div class="div4 btn"><button id="button4" @click="append(4)">4</button></div>
         <div class="div5 btn"><button data-test="button5Test" id="button5" @click="append(5)">5</button></div>
         <div class="div6 btn"><button id="button6" @click="append(6)">6</button></div>
-        <div class="div13 btn"><button data-test="multiply" id="multiply" @click="operation('*')">*</button></div>
+        <div class="div13 btn"><button data-test="multiplyTest" id="multiply" @click="operation('*')">*</button></div>
         <div class="div7 btn"><button id="button7" @click="append(7)">7</button></div>
         <div class="div8 btn"><button id="button8" @click="append(8)">8</button></div>
         <div class="div9 btn"><button id="button9" @click="append(9)">9</button></div>
@@ -24,7 +24,7 @@
         <div class="div17 btn"><button id="divide" @click="operation('/')">/</button></div>
         <div class="div18"></div>
         <div @click="append(',')" class="comma btn" id="commaDiv">,</div>
-        <div class="div21"><button id="calculate" @click="calculate()">=</button></div>
+        <div class="div21"><button data-test="calculateTest" id="calculate" @click="calculate()">=</button></div>
         </div>
     </div>
     <div id="logContainer">
@@ -63,23 +63,6 @@ export default {
                 this.operationProperty = false;
             }
 
-            //this.resetBackgroundColors();
-
-          /*
-            let div;
-            if (number === ','){
-              div = "#commaDiv";
-              number = ".";
-            }
-            else{
-              div = ".div" + number;
-            }
-
-           */
-
-
-
-            //document.querySelector(div).style.backgroundColor = "gray";
             this.currentNumber = this.currentNumber + number;
         },
 
@@ -87,7 +70,7 @@ export default {
             this.currentNumber = "";
             this.previousNumber = "";
             this.result = 0;
-            this.resetBackgroundColors();
+
         },
 
         ans(){
@@ -103,25 +86,6 @@ export default {
             this.operator = operator;
             this.previousNumber = this.currentNumber;
             this.currentNumber = "";
-
-
-
-            if(this.operator === "+"){
-                document.querySelector("#add").style.backgroundColor = "gray";
-            }
-            else if(this.operator === "-"){
-                document.querySelector("#subtract").style.backgroundColor = "gray";
-            }
-            else if(this.operator === "*"){
-                document.querySelector("#multiply").style.backgroundColor = "gray";
-            }
-            else if(this.operator === "/"){
-                document.querySelector("#divide").style.backgroundColor = "gray";
-            }
-
-
-
-
         },
 
         calculate(){
@@ -148,27 +112,13 @@ export default {
             else if(this.operator === "/"){
                 this.result = parseInt(this.previousNumber) / parseInt(this.currentNumber);
             }
-            //this.resetBackgroundColors();
             this.operationProperty = true;
-            //this.currentNumber = this.result;
-
-            console.log(this.previousNumber + " " + this.operator + " " + this.currentNumber + " = " + this.result);
-
             this.appendToHistory();
         },
 
         appendToHistory(){
             this.history.push(this.previousNumber + " " + this.operator + " " + this.currentNumber + " = " + this.result);
             this.currentNumber = this.result;
-
-            //this.$store.commit("APPEND", this.previousNumber + " " + this.operator + " " + this.currentNumber + " = " + this.result)
-        },
-
-        resetBackgroundColors(){
-            var x = document.getElementsByClassName("btn");
-            for (let index = 0; index < x.length; index++) {
-                x[index].style.backgroundColor = "initial";
-            }
         },
 
         del(){
@@ -347,15 +297,6 @@ div button:hover{
   #box {
     grid-template-columns: auto !important;
   }
-}
-
-#log-box {
-
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  grid-column-gap: 0;
-  grid-row-gap: 0;
 }
 
 .historyTitle {

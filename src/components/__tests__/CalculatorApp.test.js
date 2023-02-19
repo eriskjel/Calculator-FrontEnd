@@ -7,67 +7,6 @@ import { mount } from '@vue/test-utils'
 //import calculatorApp from "@/components/CalculatorApp.vue";
 
 
-/*test("Test that numbers get entered", async () => {
-    const wrapper = mount(CalculatorApp);
-    await wrapper.setData({
-        currentNumber: ""
-    })
-    //calculatorApp.data().currentNumber = "";
-
-    const button1 = wrapper.find("[data-test='clear2']");
-    await button1.trigger("click");
-    expect(wrapper.vm.$data.currentNumber).toBe("")
-
-    const button5 = wrapper.find("[data-test='button5Test']")
-    await button5.trigger("click");
-    expect(wrapper.vm.$data.currentNumber).toBe("5")
-
-
-    const multiply = wrapper.find("#multiply");
-    await multiply.trigger("click");
-    expect(wrapper.vm.$data.operator).toBe("*");
-
-    /!*
-    await button5.trigger("click");
-
-    const calculate = wrapper.find("#calculate");
-    await calculate.trigger("click");
-
-
-    expect(wrapper.vm.$data.currentNumber).toBe(25);
-
-     *!/
-    //expect(calculatorApp.data().operator).toBe("4")
-});*/
-
-export default {
-    data(){
-        return{
-            previousNumber: "",
-            currentNumber: "",
-            operationProperty: false,
-            operator: "",
-            result: 0,
-            history: []
-        }
-    },
-    methods:{
-        operation(operator){
-            if(this.operator === "+"){
-                document.querySelector("#add").style.backgroundColor = "gray";
-            }
-            else if(this.operator === "-"){
-                document.querySelector("#subtract").style.backgroundColor = "gray";
-            }
-            else if(this.operator === "*"){
-                document.querySelector("#multiply").style.backgroundColor = "gray";
-            }
-            else if(this.operator === "/"){
-                document.querySelector("#divide").style.backgroundColor = "gray";
-            }
-        }
-    }
-}
 
 describe("CalculatorApp", () => {
     it("should clear the current number when clear button is clicked", async () => {
@@ -92,19 +31,22 @@ describe("CalculatorApp", () => {
     it("should set the operator to multiplication when the multiplication button is clicked", async () => {
         const wrapper = mount(CalculatorApp);
 
-        wrapper.vm.calculate = jest.fn((operator) => {
-            this.operationProperty = true;
-            if (this.operator === "*"){
-                this.operator = operator;
-            }
-            console.log(operator);
-            this.operator = operator;
-            this.previousNumber = this.currentNumber;
-            this.currentNumber = "";
-        })
 
-
+        const multiplyButton = wrapper.find("[data-test='multiplyTest']");
+        await multiplyButton.trigger("click");
         expect(wrapper.vm.$data.operator).toBe("*");
+    });
+
+    it("should correctly calculate the result when the calculate button is clicked", async () => {
+        const wrapper = mount(CalculatorApp);
+        wrapper.vm.$data.currentNumber = "5";
+        wrapper.vm.$data.operator = "*";
+        wrapper.vm.$data.previousNumber = "5";
+
+        const calculateButton = wrapper.find("[data-test='calculateTest']");
+        await calculateButton.trigger("click");
+
+        expect(wrapper.vm.$data.result).toBe(25);
     });
 });
 
