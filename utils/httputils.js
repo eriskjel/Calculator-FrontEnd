@@ -24,3 +24,20 @@ const apiClient = axios.create({
 export const postContactForm = (contactForm) => {
         return apiClient.post('/full-stack/contact-form', contactForm)
 }
+
+const calcSolveClient = axios.create({
+    baseURL: 'http://localhost:8081',
+    withCredentials: false,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+
+export const postCalcSolve = (calcSolve) => {
+    return calcSolveClient.post('/calc/solve', calcSolve)
+}
+
+export const getAnswer = () => {
+    return calcSolveClient.get('/calc/ans')
+}

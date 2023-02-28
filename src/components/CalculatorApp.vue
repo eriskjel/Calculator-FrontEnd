@@ -24,7 +24,7 @@
         <div class="div17 btn"><button id="divide" @click="operation('/')">/</button></div>
         <div class="div18"></div>
         <div @click="append(',')" class="comma btn" id="commaDiv">,</div>
-        <div class="div21"><button data-test="calculateTest" id="calculate" @click="calculate()">=</button></div>
+        <div class="div21"><button data-test="calculateTest" id="calculate" @click="calculateAPI()">=</button></div>
         </div>
     </div>
     <div id="logContainer">
@@ -42,6 +42,8 @@
 
 
 <script>
+import { postCalcSolve } from "../../utils/httputils";
+//import { getAnswer } from "../../utils/httputils";
 export default {
   name: "CalculatorApp",
   data()
@@ -82,10 +84,23 @@ export default {
             if (this.operator === "*"){
               this.operator = operator;
             }
-            console.log(operator);
             this.operator = operator;
             this.previousNumber = this.currentNumber;
             this.currentNumber = "";
+        },
+
+        calculateAPI(){
+          const equation = {
+            n1: this.previousNumber,
+            n2: this.currentNumber,
+            operator: this.operator.charAt(0)
+          };
+            postCalcSolve(equation).then((response) => {
+                this.result = response.data;
+                this.appendToHistory();
+            }).catch((error) => {
+                console.log(error);
+            });
         },
 
         calculate(){
