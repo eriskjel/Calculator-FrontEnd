@@ -35,9 +35,9 @@ const calcSolveClient = axios.create({
 })
 
 export const postCalcSolve = (calcSolve) => {
-    return calcSolveClient.post('/calc/solve', calcSolve)
+    return calcSolveClient.post('/solve', calcSolve)
 }
 
 export const getAnswer = () => {
-    return calcSolveClient.get('/calc/ans')
+    return calcSolveClient.get('/ans')
 }

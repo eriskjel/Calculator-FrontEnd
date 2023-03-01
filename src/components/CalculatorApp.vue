@@ -43,7 +43,7 @@
 
 <script>
 import { postCalcSolve } from "../../utils/httputils";
-//import { getAnswer } from "../../utils/httputils";
+import { getAnswer } from "../../utils/httputils";
 export default {
   name: "CalculatorApp",
   data()
@@ -75,8 +75,9 @@ export default {
 
         },
 
-        ans(){
-            this.currentNumber = this.result;
+        async ans(){
+            const response = await getAnswer();
+            this.currentNumber = response.data;
         },
 
         operation(operator){
