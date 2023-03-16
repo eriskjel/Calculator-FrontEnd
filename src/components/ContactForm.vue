@@ -113,6 +113,7 @@
     created() {
       this.form.name = this.$store.state.name;
       this.form.email = this.$store.state.email;
+      console.log(this.$store.state.token)
     }
   }
 </script>

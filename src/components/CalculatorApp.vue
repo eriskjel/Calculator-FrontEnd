@@ -96,12 +96,13 @@ export default {
             n2: this.currentNumber,
             operator: this.operator.charAt(0)
           };
-            postCalcSolve(equation).then((response) => {
-                this.result = response.data;
-                this.appendToHistory();
-            }).catch((error) => {
-                console.log(error);
-            });
+          const token = this.$store.state.token;
+          postCalcSolve(equation, token).then((response) => {
+              this.result = response.data.result;
+              this.appendToHistory();
+          }).catch((error) => {
+              console.log(error);
+          });
         },
 
         calculate(){
