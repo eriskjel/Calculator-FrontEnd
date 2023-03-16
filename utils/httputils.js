@@ -25,7 +25,7 @@ export const postContactForm = (contactForm) => {
         return apiClient.post('/full-stack/contact-form', contactForm)
 }
 
-const calcSolveClient = axios.create({
+const calcClient = axios.create({
     baseURL: 'http://localhost:8081/api/calculator',
     withCredentials: false,
     headers: {
@@ -35,16 +35,16 @@ const calcSolveClient = axios.create({
 })
 
 const setToken = (token) => {
-    calcSolveClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    calcClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 
 export const postCalcSolve = (calcSolve, token) => {
     setToken(token)
-    return calcSolveClient.post('/solve', calcSolve)
+    return calcClient.post('/solve', calcSolve)
 }
 
 export const getAnswer = () => {
-    return calcSolveClient.get('/ans')
+    return calcClient.get('/ans')
 }
 
 const loginAPI = axios.create({
@@ -59,3 +59,15 @@ const loginAPI = axios.create({
 export const postLogin = (login) => {
     return loginAPI.post('/login', login)
 }
+
+export const getCalculations = (token) => {
+    setToken(token);
+    console.log(token)
+    return calcClient.get('/allcalculations');
+};
+
+export const postRegister = (registerData) => {
+    console.log(registerData);
+    return loginAPI.post('/register', registerData);
+};
+

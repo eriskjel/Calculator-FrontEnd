@@ -44,8 +44,8 @@
 
 
 <script>
-import { postCalcSolve } from "../../utils/httputils";
-import { getAnswer } from "../../utils/httputils";
+import {getAnswer, getCalculations, postCalcSolve} from "../../utils/httputils";
+
 export default {
   name: "CalculatorApp",
   data()
@@ -128,8 +128,45 @@ export default {
 
     del(){
       this.currentNumber = this.currentNumber.slice(0, -1);
+    },
+    formatCalculation(calculation) {
+      return calculation.n1 + ' ' + calculation.operator + ' ' + calculation.n2 + ' = ' + calculation.result;
+    },
+    async fetchCalculations() {
+      const token = this.$store.state.token; // Replace with the actual token obtained during authentication
+
+      try {
+        const response = await getCalculations(token);
+
+        if (response.status === 200) {
+          this.history = response.data.map(this.formatCalculation);
+        } else {
+          console.error('Failed to fetch calculations');
+        }
+      } catch (error) {
+        console.error('Error fetching calculations:', error);
+      }
+    },
+
+  },
+  watch: {
+    $route(to) {
+      // Check if the route changed to the desired view (replace '/your-view-path' with the actual path)
+      if (to.path === '/calculator') {
+        this.fetchCalculations();
+      }
     }
   },
+
+  async mounted(){
+    try{
+      const response = await this.fetchCalculations();
+      this.history = response.data;
+    }
+    catch (error){
+      console.log("Error fetching: " + error);
+    }
+  }
 
 }
 </script>

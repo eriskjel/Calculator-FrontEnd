@@ -11,6 +11,8 @@
 
 <script>
 import BaseInput from "@/components/BaseInput.vue";
+import {postRegister} from "../../utils/httputils";
+import router from "@/router";
 
 
 
@@ -27,7 +29,17 @@ export default {
   },
   methods: {
     sendForm() {
-      console.log(this.form);
+      postRegister(this.form)
+          .then((response) => {
+            this.$store.state.token = response.data.token;
+            router.push({name: "calculator"});
+          })
+          .catch((error) => {
+            if (error.response.data.errorMessage === "Username already exists") {
+              alert("Username already exists");
+            }
+            // Handle registration error, e.g., show an error message
+          });
     }
   },
 }
