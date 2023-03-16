@@ -37,7 +37,7 @@
               this.form.username = "";
               this.form.password = "";
 
-              console.log(response);
+              this.$router.push({name: "calculator"});
             })
             .catch(error => {
               console.log(error);

@@ -40,7 +40,6 @@ const setToken = (token) => {
 
 export const postCalcSolve = (calcSolve, token) => {
     setToken(token)
-    console.log("token: " + token)
     return calcSolveClient.post('/solve', calcSolve)
 }
 

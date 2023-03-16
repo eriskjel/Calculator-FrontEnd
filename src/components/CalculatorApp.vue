@@ -2,10 +2,12 @@
   <div id="box">
   <div id="container">
     <div class="parent">
-        <div id="result" class="div12">
-            <p class="blinking-cursor">{{ currentNumber || "|" }}</p>
-        </div>
-        <div @click="clear()" data-test="clear2" id="clear" class="div14">C</div>
+      <div id="result" class="div12">
+        <p class="blinking-cursor" v-if="!errorMessage" v-text="currentNumber || '|'"></p>
+        <p class="blinking-cursor error-message" v-else v-html="errorMessage || '|'"></p>
+      </div>
+
+      <div @click="clear()" data-test="clear2" id="clear" class="div14">C</div>
         <div @click="ans()" class="div15">ANS</div>
         <div @click="del()" class="div10">DEL</div>
         <div class="div1 btn"><button id="button1" data-test="button1" @click="append(1)">1</button></div>
@@ -56,6 +58,7 @@ export default {
       result: 0,
       history: [],
       logBoxTitle: "HistoryBox",
+      errorMessage: ""
     }
   },
   methods: {
@@ -82,71 +85,66 @@ export default {
 
         operation(operator){
             this.operationProperty = true;
-            if (this.operator === "*"){
-              this.operator = operator;
-            }
             this.operator = operator;
             this.previousNumber = this.currentNumber;
             this.currentNumber = "";
         },
 
-        calculateAPI(){
-          const equation = {
-            n1: this.previousNumber,
-            n2: this.currentNumber,
-            operator: this.operator.charAt(0)
-          };
-          const token = this.$store.state.token;
-          postCalcSolve(equation, token).then((response) => {
-              this.result = response.data.result;
-              this.appendToHistory();
-          }).catch((error) => {
-              console.log(error);
+    calculateAPI() {
+      const equation = {
+        n1: this.previousNumber,
+        n2: this.currentNumber,
+        operator: this.operator.charAt(0),
+      };
+      const token = this.$store.state.token;
+      // In your calculateAPI() method
+
+      postCalcSolve(equation, token)
+          .then((response) => {
+            if (response.data.authenticationState === "AUTHENTICATED") {
+              // Display the result
+
+              this.appendToHistory(response.data.result);
+              this.currentNumber = response.data.result;
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 400){
+              if (error.response.data.authenticationState === "TOKEN_EXPIRED"){
+                this.errorMessage = "Token expired. Please log in again.";
+              } else if (error.response.data.authenticationState === "UNAUTHENTICATED") {
+                this.errorMessage = "Not authenticated. <br> Please log in again.";
+              }
+            }
           });
-        },
+    },
+    appendToHistory(result) {
+      console.log("test");
+      console.log("previous number: " + this.previousNumber + " current number: " + this.currentNumber + " operator: " + this.operator + " result: " + result);
+      const tempCurrentNumber = this.currentNumber; // Store the currentNumber in a temporary variable
+      this.history.push(this.previousNumber + " " + this.operator + " " + tempCurrentNumber + " = " + result);
+      this.currentNumber = result;
+    },
 
-        calculate(){
-            if (this.previousNumber === "" || this.currentNumber === "" || this.operator === ""){
-                return;
-            }
-            if (this.operator === "/" && this.currentNumber === "0"){
-                alert("You can't divide by zero!");
-                return;
-            }
-            if (!(this.operator === "+" || this.operator === "-" || this.operator === "*" || this.operator === "/")){
-                return;
-            }
-            if(this.operator === "+"){
-                //console.log("previous number: " + this.previousNumber + " current number: " + this.currentNumber + " result: " + this.result);
-                this.result = parseFloat(this.previousNumber) + parseFloat(this.currentNumber);
-            }
-            else if(this.operator === "-"){
-                this.result = parseInt(this.previousNumber) - parseInt(this.currentNumber);
-            }
-            else if(this.operator === "*"){
-                this.result = parseInt(this.previousNumber) * parseInt(this.currentNumber);
-            }
-            else if(this.operator === "/"){
-                this.result = parseInt(this.previousNumber) / parseInt(this.currentNumber);
-            }
-            this.operationProperty = true;
-            this.appendToHistory();
-        },
-
-        appendToHistory(){
-            this.history.push(this.previousNumber + " " + this.operator + " " + this.currentNumber + " = " + this.result);
-            this.currentNumber = this.result;
-        },
-
-        del(){
-            this.currentNumber = this.currentNumber.slice(0, -1);
-        }
+    del(){
+      this.currentNumber = this.currentNumber.slice(0, -1);
     }
+  },
+
 }
 </script>
 
 
 <style>
+
+.error-message {
+  color: red;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 #container {
   width: 70%;
   height: 500px;
