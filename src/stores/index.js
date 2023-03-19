@@ -4,7 +4,8 @@ export default createStore({
     state: {
         name: "",
         email: "",
-        token: null
+        token: null,
+        refreshToken: null
     },
     getters: {
     },
@@ -15,16 +16,10 @@ export default createStore({
 
         SET_EMAIL(state, email){
             state.email = email
-        },
-
-        SET_TOKEN(state, token){
-            state.token = token
         }
     },
     actions: {
-        login({commit}, token){
-            commit("SET_TOKEN", token)
-        }
+
     },
     modules: {
     }
