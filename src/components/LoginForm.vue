@@ -14,7 +14,6 @@
   import BaseInput from "@/components/BaseInput.vue";
 
   import { postLogin } from "../../utils/httputils";
-  import {mapMutations} from "vuex";
 
   export default {
     name: 'ContactForm',
@@ -28,16 +27,16 @@
       }
     },
     methods: {
-      ...mapMutations(["SET_TOKEN"]),
       sendForm() {
         postLogin(this.form)
             .then(response => {
-              const token = response.data.token;
-              this.SET_TOKEN(token);
-              this.form.username = "";
-              this.form.password = "";
+              if (response.status === 200){
+                this.form.username = "";
+                this.form.password = "";
 
-              this.$router.push({name: "calculator"});
+                this.$router.push({name: "calculator"});
+              }
+
             })
             .catch(error => {
               console.log(error);

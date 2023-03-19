@@ -27,19 +27,15 @@ export const postContactForm = (contactForm) => {
 
 const calcClient = axios.create({
     baseURL: 'http://localhost:8081/api/calculator',
-    withCredentials: false,
+    withCredentials: true,
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
     }
 })
 
-const setToken = (token) => {
-    calcClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
-}
 
-export const postCalcSolve = (calcSolve, token) => {
-    setToken(token)
+export const postCalcSolve = (calcSolve) => {
     return calcClient.post('/solve', calcSolve)
 }
 
@@ -49,7 +45,7 @@ export const getAnswer = () => {
 
 const loginAPI = axios.create({
     baseURL: 'http://localhost:8081/api/auth',
-    withCredentials: false,
+    withCredentials: true,
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
@@ -60,9 +56,7 @@ export const postLogin = (login) => {
     return loginAPI.post('/login', login)
 }
 
-export const getCalculations = (token) => {
-    setToken(token);
-    console.log(token)
+export const getCalculations = () => {
     return calcClient.get('/allcalculations');
 };
 
